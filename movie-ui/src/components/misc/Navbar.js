@@ -45,7 +45,7 @@ function Navbar() {
                      style={adminPageStyle()}>AdminPage</Menu.Item>
           <Menu.Item as={Link} name={'userPage'} to="/userpage" onClick={handleItemClick}
                      active={activeItem === 'userPage'}
-                     style={userPageStyle()}>UserPage</Menu.Item>
+                     style={userPageStyle()}>Movies</Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item as={Link} to="/login" style={enterMenuStyle()}>Login</Menu.Item>
             <Menu.Item as={Link} to="/signup" style={enterMenuStyle()}>Sign Up</Menu.Item>

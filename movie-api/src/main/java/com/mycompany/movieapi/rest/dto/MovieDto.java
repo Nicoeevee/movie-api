@@ -8,6 +8,6 @@ public class MovieDto {
   private String imdb;
   private String title;
   private String poster;
+  private String url;
   private String createdAt;
-
 }

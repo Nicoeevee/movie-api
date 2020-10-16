@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react'
-import { Button, Form, Grid, Image, Input, Table } from 'semantic-ui-react'
+import React, {Fragment} from 'react'
+import {Button, Divider, Form, Image, Input, Table} from 'semantic-ui-react'
 import MovieForm from './MovieForm'
 
-function MovieTable({ movies, movieImdb, movieTitle, moviePoster, movieTextSearch, handleInputChange, handleAddMovie, handleDeleteMovie, handleSearchMovie }) {
+function MovieTable({movies, movieImdb, movieTitle, moviePoster, movieUrl, movieTextSearch, handleInputChange, handleAddMovie, handleDeleteMovie, handleSearchMovie}) {
   let movieList
   if (movies.length === 0) {
     movieList = (
@@ -24,13 +24,14 @@ function MovieTable({ movies, movieImdb, movieTitle, moviePoster, movieTextSearc
             />
           </Table.Cell>
           <Table.Cell>
-            { movie.poster ?
-            <Image src={movie.poster} size='tiny' bordered rounded /> :
-            <Image src='/images/movie-poster.jpg' size='tiny' bordered rounded />
+            {movie.poster ?
+              <Image src={movie.poster} size='tiny' bordered rounded/> :
+              <Image src='/images/movie-poster.jpg' size='tiny' bordered rounded/>
             }
           </Table.Cell>
           <Table.Cell>{movie.imdb}</Table.Cell>
           <Table.Cell>{movie.title}</Table.Cell>
+          <Table.Cell><a href={movie.url} target='_blank'>{movie.url}</a></Table.Cell>
           <Table.Cell>{movie.createdAt}</Table.Cell>
         </Table.Row>
       )
@@ -39,30 +40,24 @@ function MovieTable({ movies, movieImdb, movieTitle, moviePoster, movieTextSearc
 
   return (
     <Fragment>
-      <Grid stackable divided>
-        <Grid.Row columns='2'>
-          <Grid.Column width='5'>
-            <Form onSubmit={handleSearchMovie}>
-              <Input
-                action={{ icon: 'search' }}
-                name='movieTextSearch'
-                placeholder='Search by Imdb or Title'
-                value={movieTextSearch}
-                onChange={handleInputChange}
-              />
-            </Form>
-          </Grid.Column>
-          <Grid.Column>
-            <MovieForm
-              movieImdb={movieImdb}
-              movieTitle={movieTitle}
-              moviePoster={moviePoster}
-              handleInputChange={handleInputChange}
-              handleAddMovie={handleAddMovie}
-            />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <Form onSubmit={handleSearchMovie}>
+        <Input
+          action={{icon: 'search'}}
+          name='movieTextSearch'
+          placeholder='Search by Imdb or Title'
+          value={movieTextSearch}
+          onChange={handleInputChange}
+        />
+      </Form>
+      <Divider/>
+      <MovieForm
+        movieImdb={movieImdb}
+        movieTitle={movieTitle}
+        moviePoster={moviePoster}
+        movieUrl={movieUrl}
+        handleInputChange={handleInputChange}
+        handleAddMovie={handleAddMovie}
+      />
       <Table compact striped selectable>
         <Table.Header>
           <Table.Row>
@@ -70,6 +65,7 @@ function MovieTable({ movies, movieImdb, movieTitle, moviePoster, movieTextSearc
             <Table.HeaderCell width={4}>Poster</Table.HeaderCell>
             <Table.HeaderCell width={3}>IMDB</Table.HeaderCell>
             <Table.HeaderCell width={4}>Title</Table.HeaderCell>
+            <Table.HeaderCell width={4}>Url</Table.HeaderCell>
             <Table.HeaderCell width={4}>CreatedAt</Table.HeaderCell>
           </Table.Row>
         </Table.Header>

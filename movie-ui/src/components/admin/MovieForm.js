@@ -1,7 +1,7 @@
 import React from 'react'
-import { Form, Icon, Button } from 'semantic-ui-react'
+import {Button, Form, Icon} from 'semantic-ui-react'
 
-function MovieForm({ movieImdb, movieTitle, moviePoster, handleInputChange, handleAddMovie }) {
+function MovieForm({movieImdb, movieTitle, moviePoster, movieUrl, handleInputChange, handleAddMovie}) {
   const createBtnDisabled = movieImdb.trim() === '' || movieTitle.trim() === ''
   return (
     <Form onSubmit={handleAddMovie}>
@@ -24,8 +24,15 @@ function MovieForm({ movieImdb, movieTitle, moviePoster, handleInputChange, hand
           value={moviePoster}
           onChange={handleInputChange}
         />
+        <Form.Input
+          name='movieUrl'
+          placeholder='Url'
+          value={movieUrl}
+          onChange={handleInputChange}
+        />
         <Button icon labelPosition='right' disabled={createBtnDisabled}>
-          Create<Icon name='add' />
+          Create
+          <Icon name='add'/>
         </Button>
       </Form.Group>
     </Form>

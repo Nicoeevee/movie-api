@@ -1,16 +1,16 @@
 import React from 'react'
-import { Tab } from 'semantic-ui-react'
+import {Tab} from 'semantic-ui-react'
 import UserTable from './UserTable'
 import MovieTable from './MovieTable'
 
 function AdminTab(props) {
-  const { handleInputChange } = props
-  const { isUsersLoading, users, userUsernameSearch, handleDeleteUser, handleSearchUser } = props
-  const { isMoviesLoading, movies, movieImdb, movieTitle, moviePoster, movieTextSearch, handleAddMovie, handleDeleteMovie, handleSearchMovie } = props
+  const {handleInputChange} = props
+  const {isUsersLoading, users, userUsernameSearch, handleDeleteUser, handleSearchUser} = props
+  const {isMoviesLoading, movies, movieImdb, movieTitle, moviePoster, movieUrl, movieTextSearch, handleAddMovie, handleDeleteMovie, handleSearchMovie} = props
 
   const panes = [
     {
-      menuItem: { key: 'users', icon: 'users', content: 'Users' },
+      menuItem: {key: 'users', icon: 'users', content: 'Users'},
       render: () => (
         <Tab.Pane loading={isUsersLoading}>
           <UserTable
@@ -24,7 +24,7 @@ function AdminTab(props) {
       )
     },
     {
-      menuItem: { key: 'movies', icon: 'video camera', content: 'Movies' },
+      menuItem: {key: 'movies', icon: 'video camera', content: 'Movies'},
       render: () => (
         <Tab.Pane loading={isMoviesLoading}>
           <MovieTable
@@ -32,6 +32,7 @@ function AdminTab(props) {
             movieImdb={movieImdb}
             movieTitle={movieTitle}
             moviePoster={moviePoster}
+            movieUrl={movieUrl}
             movieTextSearch={movieTextSearch}
             handleInputChange={handleInputChange}
             handleAddMovie={handleAddMovie}
@@ -44,7 +45,7 @@ function AdminTab(props) {
   ]
 
   return (
-    <Tab menu={{ attached: 'top' }} panes={panes} />
+    <Tab menu={{attached: 'top'}} panes={panes}/>
   )
 }
 
