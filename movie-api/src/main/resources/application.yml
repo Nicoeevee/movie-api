@@ -7,14 +7,14 @@ spring:
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/moviedb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
-    password: secret
+    password: root
   security:
     oauth2:
       client:
         registration:
           github:
-            clientId: ${GITHUB_CLIENT_ID}
-            clientSecret: ${GITHUB_CLIENT_SECRET}
+            clientId: ${GITHUB_CLIENT_ID:023f1e42ed111ce96462}
+            clientSecret: ${GITHUB_CLIENT_SECRET:3f82ce2e91bd1e25a2506b4674e9eb9770004fbd}
 
 app:
   jwt:
