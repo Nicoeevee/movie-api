@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { config } from '../../Constants'
-import { parseJwt } from './Helpers'
+import {config} from '../../Constants'
+import {parseJwt} from './Helpers'
 
 export const movieApi = {
   authenticate,
@@ -11,18 +11,19 @@ export const movieApi = {
   deleteUser,
   getMovies,
   deleteMovie,
-  addMovie
+  addMovie,
+  getMovie
 }
 
 function authenticate(username, password) {
-  return instance.post('/auth/authenticate', { username, password }, {
-    headers: { 'Content-type': 'application/json' }
+  return instance.post('/auth/authenticate', {username, password}, {
+    headers: {'Content-type': 'application/json'}
   })
 }
 
 function signup(user) {
   return instance.post('/auth/signup', user, {
-    headers: { 'Content-type': 'application/json' }
+    headers: {'Content-type': 'application/json'}
   })
 }
 
@@ -37,26 +38,26 @@ function numberOfMovies() {
 function getUsers(user, username) {
   const url = username ? `/api/users/${username}` : '/api/users'
   return instance.get(url, {
-    headers: { 'Authorization': bearerAuth(user) }
+    headers: {'Authorization': bearerAuth(user)}
   })
 }
 
 function deleteUser(user, username) {
   return instance.delete(`/api/users/${username}`, {
-    headers: { 'Authorization': bearerAuth(user) }
+    headers: {'Authorization': bearerAuth(user)}
   })
 }
 
 function getMovies(user, text) {
   const url = text ? `/api/movies?text=${text}` : '/api/movies'
   return instance.get(url, {
-    headers: { 'Authorization': bearerAuth(user) }
+    headers: {'Authorization': bearerAuth(user)}
   })
 }
 
 function deleteMovie(user, id) {
   return instance.delete(`/api/movies/${id}`, {
-    headers: { 'Authorization': bearerAuth(user) }
+    headers: {'Authorization': bearerAuth(user)}
   })
 }
 
@@ -67,6 +68,10 @@ function addMovie(user, movie) {
       'Authorization': bearerAuth(user)
     }
   })
+}
+
+function getMovie(tid) {
+  return axios.get(`https://p.media-imdb.com/static-content/documents/v1/title/${tid}/ratings%3Fjsonp=imdb.rating.run:imdb.api.title.ratings/data.json?u=ur125219703&s=p3`)
 }
 
 // -- Axios

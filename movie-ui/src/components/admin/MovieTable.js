@@ -31,7 +31,7 @@ function MovieTable({movies, movieImdb, movieTitle, moviePoster, movieUrl, movie
           </Table.Cell>
           <Table.Cell>{movie.imdb}</Table.Cell>
           <Table.Cell>{movie.title}</Table.Cell>
-          <Table.Cell><a href={movie.url} target='_blank'>{movie.url}</a></Table.Cell>
+          <Table.Cell><a href={movie.url} target='_blank' rel="noopener noreferrer">{movie.url}</a></Table.Cell>
           <Table.Cell>{movie.createdAt}</Table.Cell>
         </Table.Row>
       )

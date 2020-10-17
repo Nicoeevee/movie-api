@@ -3,11 +3,9 @@ package com.mycompany.movieapi.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -34,5 +32,8 @@ public class Movie {
     public void onPrePersist() {
         createdAt = ZonedDateTime.now();
     }
+
+    @ManyToMany
+    private Set<Bookmark> bookmarks;
 
 }

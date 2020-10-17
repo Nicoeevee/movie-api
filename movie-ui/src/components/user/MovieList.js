@@ -1,6 +1,5 @@
 import React from 'react'
-import {Form, Grid, Header, Icon, Image, Input, Item, Segment} from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
+import {Divider, Form, Grid, Header, Icon, Image, Input, Item, Segment} from 'semantic-ui-react'
 
 function MovieList({isMoviesLoading, movieTextSearch, movies, handleInputChange, handleSearchMovie}) {
   let movieList
@@ -13,10 +12,31 @@ function MovieList({isMoviesLoading, movieTextSearch, movies, handleInputChange,
           <Image src={movie.poster} size='small' bordered rounded/>
           <Item.Content>
             <Item.Header>{movie.title}</Item.Header>
+            <Divider/>
             <Item.Meta>{movie.imdb}</Item.Meta>
             <Item.Description>
               <Image src='https://react.semantic-ui.com/images/wireframe/short-paragraph.png'/>
             </Item.Description>
+            <Item.Extra>
+              <span className="imdbRatingPlugin" data-user="ur125219703" data-title={movie.imdb} data-style="p3"><a
+                href={`https://www.imdb.com/title/${movie.imdb}/?ref_=plg_rt_1`}><img
+                src="https://ia.media-imdb.com/images/G/01/imdb/plugins/rating/images/imdb_37x18.png" alt={`${movie.name} on IMDb`}/>
+</a></span>
+              {
+                function (d, s, id) {
+                  var js, stags = d.getElementsByTagName(s)[0];
+                  if (d.getElementById(id)) {
+                    return;
+                  }
+                  js = d.createElement(s);
+                  js.id = id;
+                  js.src = "https://ia.media-imdb.com/images/G/01/imdb/plugins/rating/js/rating.js";
+                  stags.parentNode.insertBefore(js, stags);
+                }
+                (document, "script", "imdb-rating-api")
+              }
+
+            </Item.Extra>
           </Item.Content>
         </Item>
       )

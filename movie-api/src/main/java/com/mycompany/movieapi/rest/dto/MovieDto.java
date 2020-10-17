@@ -1,6 +1,9 @@
 package com.mycompany.movieapi.rest.dto;
 
+import com.mycompany.movieapi.model.Bookmark;
 import lombok.Data;
+
+import java.util.Set;
 
 @Data
 public class MovieDto {
@@ -10,4 +13,5 @@ public class MovieDto {
   private String poster;
   private String url;
   private String createdAt;
+  private Set<Bookmark> bookmarks;
 }
