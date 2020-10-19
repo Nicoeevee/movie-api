@@ -12,7 +12,8 @@ export const movieApi = {
   getMovies,
   deleteMovie,
   addMovie,
-  getMovie
+  getMovie,
+  addBookmark,
 }
 
 function authenticate(username, password) {
@@ -72,6 +73,15 @@ function addMovie(user, movie) {
 
 function getMovie(tid) {
   return axios.get(`https://p.media-imdb.com/static-content/documents/v1/title/${tid}/ratings%3Fjsonp=imdb.rating.run:imdb.api.title.ratings/data.json?u=ur125219703&s=p3`)
+}
+
+function addBookmark(user, bookmark) {
+  return instance.post('/api/bookmarks', bookmark, {
+    headers: {
+      'Content-type': 'application/json',
+      'Authorization': bearerAuth(user)
+    }
+  })
 }
 
 // -- Axios

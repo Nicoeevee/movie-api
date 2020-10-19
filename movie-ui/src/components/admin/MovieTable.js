@@ -32,7 +32,8 @@ function MovieTable({movies, movieImdb, movieTitle, moviePoster, movieUrl, movie
           <Table.Cell>{movie.imdb}</Table.Cell>
           <Table.Cell>{movie.title}</Table.Cell>
           <Table.Cell><a href={movie.url} target='_blank' rel="noopener noreferrer">{movie.url}</a></Table.Cell>
-          <Table.Cell>{movie.createdAt}</Table.Cell>
+          <Table.Cell>{new Date(movie.createTime).toLocaleString()}</Table.Cell>
+          <Table.Cell>{new Date(movie.updateTime).toLocaleString()}</Table.Cell>
         </Table.Row>
       )
     })
@@ -66,7 +67,8 @@ function MovieTable({movies, movieImdb, movieTitle, moviePoster, movieUrl, movie
             <Table.HeaderCell width={3}>IMDB</Table.HeaderCell>
             <Table.HeaderCell width={4}>Title</Table.HeaderCell>
             <Table.HeaderCell width={4}>Url</Table.HeaderCell>
-            <Table.HeaderCell width={4}>CreatedAt</Table.HeaderCell>
+            <Table.HeaderCell width={4}>Created Time</Table.HeaderCell>
+            <Table.HeaderCell width={4}>Updated Time</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

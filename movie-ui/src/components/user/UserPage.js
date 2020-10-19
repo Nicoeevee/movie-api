@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
-import { Container } from 'semantic-ui-react'
+import React, {Component} from 'react'
+import {Redirect} from 'react-router-dom'
+import {Container} from 'semantic-ui-react'
 import MovieList from './MovieList'
-import AuthContext from '../context/AuthContext'
-import { movieApi } from '../misc/MovieApi'
-import { handleLogError } from '../misc/Helpers'
+import AuthContext, {useAuth} from '../context/AuthContext'
+import {movieApi} from '../misc/MovieApi'
+import {handleLogError} from '../misc/Helpers'
 
 class UserPage extends Component {
   static contextType = AuthContext
@@ -20,29 +20,29 @@ class UserPage extends Component {
     const Auth = this.context
     const user = Auth.getUser()
     const isUser = user.data.rol[0] === 'USER'
-    this.setState({ isUser })
+    this.setState({isUser})
 
     this.handleGetMovies()
   }
 
-  handleInputChange = (e, { name, value }) => {
-    this.setState({ [name]: value })
+  handleInputChange = (e, {name, value}) => {
+    this.setState({[name]: value})
   }
 
   handleGetMovies = () => {
     const Auth = this.context
     const user = Auth.getUser()
 
-    this.setState({ isMoviesLoading: true })
+    this.setState({isMoviesLoading: true})
     movieApi.getMovies(user)
       .then(response => {
-        this.setState({ movies: response.data })
+        this.setState({movies: response.data})
       })
       .catch(error => {
         handleLogError(error)
       })
       .finally(() => {
-        this.setState({ isMoviesLoading: false })
+        this.setState({isMoviesLoading: false})
       })
   }
 
@@ -54,19 +54,44 @@ class UserPage extends Component {
     movieApi.getMovies(user, text)
       .then(response => {
         const movies = response.data
-        this.setState({ movies })
+        this.setState({movies})
       })
       .catch(error => {
         handleLogError(error)
-        this.setState({ movies: [] })
+        this.setState({movies: []})
+      })
+  }
+
+  handleAddBookmark = (movieImdb) => {
+    const Auth = this.context
+    const user = Auth.getUser()
+
+    let {bookmarkName, bookmarkDescription} = this.state
+    bookmarkName = bookmarkName.trim()
+    bookmarkDescription = bookmarkDescription.trim()
+    if (!(movieImdb && bookmarkName && bookmarkDescription)) {
+      return
+    }
+    const bookmark = {imdb: movieImdb, name: bookmarkName, description: bookmarkDescription}
+
+    movieApi.addBookmark(user, bookmark)
+      .then(response => {
+        alert("撰写影评成功")
+      })
+      .catch(error => {
+        handleLogError(error)
+      })
+      .finally(() => {
+        this.handleGetMovies()
       })
   }
 
   render() {
     if (!this.state.isUser) {
-      return <Redirect to='/' />
+      useAuth().onItemClick(null, 'home')
+      return <Redirect to='/'/>
     } else {
-      const { isMoviesLoading, movies, movieTextSearch } = this.state
+      const {isMoviesLoading, movies, movieTextSearch, bookmarkName, bookmarkDescription} = this.state
       return (
         <Container>
           <MovieList
@@ -75,6 +100,9 @@ class UserPage extends Component {
             movies={movies}
             handleInputChange={this.handleInputChange}
             handleSearchMovie={this.handleSearchMovie}
+            handleAddBookmark={this.handleAddBookmark}
+            bookmarkName={bookmarkName}
+            bookmarkDescription={bookmarkDescription}
           />
         </Container>
       )

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 import {Container} from 'semantic-ui-react'
-import AuthContext from '../context/AuthContext'
+import AuthContext, {useAuth} from '../context/AuthContext'
 import {movieApi} from '../misc/MovieApi'
 import AdminTab from './AdminTab'
 import {handleLogError} from '../misc/Helpers'
@@ -163,6 +163,7 @@ class AdminPage extends Component {
 
   render() {
     if (!this.state.isAdmin) {
+      useAuth().onItemClick(null, 'home')
       return <Redirect to='/'/>
     } else {
       const {isUsersLoading, users, userUsernameSearch, isMoviesLoading, movies, movieImdb, movieTitle, moviePoster, movieUrl, movieTextSearch} = this.state

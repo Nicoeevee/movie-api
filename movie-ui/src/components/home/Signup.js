@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { NavLink, Redirect } from 'react-router-dom'
-import { Button, Form, Grid, Segment, Message } from 'semantic-ui-react'
-import AuthContext from '../context/AuthContext'
-import { movieApi } from '../misc/MovieApi'
-import { parseJwt, handleLogError } from '../misc/Helpers'
+import React, {Component} from 'react'
+import {NavLink, Redirect} from 'react-router-dom'
+import {Button, Form, Grid, Message, Segment} from 'semantic-ui-react'
+import AuthContext, {useAuth} from '../context/AuthContext'
+import {movieApi} from '../misc/MovieApi'
+import {handleLogError, parseJwt} from '../misc/Helpers'
 
 class Signup extends Component {
   static contextType = AuthContext
@@ -21,17 +21,17 @@ class Signup extends Component {
   componentDidMount() {
     const Auth = this.context
     const isLoggedIn = Auth.userIsAuthenticated()
-    this.setState({ isLoggedIn })
+    this.setState({isLoggedIn})
   }
 
-  handleInputChange = (e, { name, value }) => {
-    this.setState({ [name]: value })
+  handleInputChange = (e, {name, value}) => {
+    this.setState({[name]: value})
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
 
-    const { username, password, name, email } = this.state
+    const {username, password, name, email} = this.state
     if (!(username && password && name && email)) {
       this.setState({
         isError: true,
@@ -40,12 +40,12 @@ class Signup extends Component {
       return
     }
 
-    const user = { username, password, name, email }
+    const user = {username, password, name, email}
     movieApi.signup(user)
       .then(response => {
-        const { accessToken } = response.data
+        const {accessToken} = response.data
         const data = parseJwt(accessToken)
-        const user = { data, accessToken }
+        const user = {data, accessToken}
 
         const Auth = this.context
         Auth.userLogin(user)
@@ -77,13 +77,14 @@ class Signup extends Component {
   }
 
   render() {
-    const { isLoggedIn, isError, errorMessage } = this.state
+    const {isLoggedIn, isError, errorMessage} = this.state
     if (isLoggedIn) {
-      return <Redirect to='/' />
+      useAuth().onItemClick(null, 'home')
+      return <Redirect to='/'/>
     } else {
       return (
         <Grid textAlign='center'>
-          <Grid.Column style={{ maxWidth: 450 }}>
+          <Grid.Column style={{maxWidth: 450}}>
             <Form size='large' onSubmit={this.handleSubmit}>
               <Segment>
                 <Form.Input
@@ -120,11 +121,11 @@ class Signup extends Component {
                   placeholder='Email'
                   onChange={this.handleInputChange}
                 />
-                <Button color='purple' fluid size='large'>Signup</Button>
+                <Button color='yellow' fluid size='large'>Signup</Button>
               </Segment>
             </Form>
             <Message>{`Already have an account? `}
-              <a href='/login' color='purple' as={NavLink} to="/login">Login</a>
+              <a href='/login' color='yellow' as={NavLink} to="/login">Login</a>
             </Message>
             {isError && <Message negative>{errorMessage}</Message>}
           </Grid.Column>

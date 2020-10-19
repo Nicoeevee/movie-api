@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { NavLink, Redirect } from 'react-router-dom'
-import { Button, Form, Grid, Icon, Segment, Menu, Message, Divider } from 'semantic-ui-react'
+import React, {Component} from 'react'
+import {NavLink, Redirect} from 'react-router-dom'
+import {Button, Divider, Form, Grid, Icon, Menu, Message, Segment} from 'semantic-ui-react'
 import AuthContext from '../context/AuthContext'
-import { movieApi } from '../misc/MovieApi'
-import { parseJwt, getSocialLoginUrl, handleLogError } from '../misc/Helpers'
+import {movieApi} from '../misc/MovieApi'
+import {getSocialLoginUrl, handleLogError, parseJwt} from '../misc/Helpers'
 
 class Login extends Component {
   static contextType = AuthContext
@@ -18,27 +18,27 @@ class Login extends Component {
   componentDidMount() {
     const Auth = this.context
     const isLoggedIn = Auth.userIsAuthenticated()
-    this.setState({ isLoggedIn })
+    this.setState({isLoggedIn})
   }
 
-  handleInputChange = (e, { name, value }) => {
-    this.setState({ [name]: value })
+  handleInputChange = (e, {name, value}) => {
+    this.setState({[name]: value})
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
 
-    const { username, password } = this.state
+    const {username, password} = this.state
     if (!(username && password)) {
-      this.setState({ isError: true })
+      this.setState({isError: true})
       return
     }
 
     movieApi.authenticate(username, password)
       .then(response => {
-        const { accessToken } = response.data
+        const {accessToken} = response.data
         const data = parseJwt(accessToken)
-        const user = { data, accessToken }
+        const user = {data, accessToken}
 
         const Auth = this.context
         Auth.userLogin(user)
@@ -52,7 +52,7 @@ class Login extends Component {
       })
       .catch(error => {
         handleLogError(error)
-        this.setState({ isError: true })
+        this.setState({isError: true})
       })
   }
 
@@ -62,14 +62,14 @@ class Login extends Component {
   }
 
   render() {
-    const { isLoggedIn, isError } = this.state
+    const {isLoggedIn, isError} = this.state
     const referer = this.getReferer()
     if (isLoggedIn) {
-      return <Redirect to={referer} />
+      return <Redirect to={referer}/>
     } else {
       return (
         <Grid textAlign='center'>
-          <Grid.Column style={{ maxWidth: 450 }}>
+          <Grid.Column style={{maxWidth: 450}}>
             <Form size='large' onSubmit={this.handleSubmit}>
               <Segment>
                 <Form.Input
@@ -90,11 +90,11 @@ class Login extends Component {
                   type='password'
                   onChange={this.handleInputChange}
                 />
-                <Button color='purple' fluid size='large'>Login</Button>
+                <Button color='yellow' fluid size='large'>Login</Button>
               </Segment>
             </Form>
             <Message>{`Don't have already an account? `}
-              <a href='/signup' color='purple' as={NavLink} to="/signup">Sign Up</a>
+              <a href='/signup' color='yellow' as={NavLink} to="/signup">Sign Up</a>
             </Message>
             {isError && <Message negative>The username or password provided are incorrect!</Message>}
 
@@ -102,16 +102,16 @@ class Login extends Component {
 
             <Menu compact icon='labeled'>
               <Menu.Item name='github' href={getSocialLoginUrl('github')}>
-                <Icon name='github' />Github
+                <Icon name='github'/>Github
               </Menu.Item>
               <Menu.Item name='facebook'>
-                <Icon name='facebook' disabled />Facebook
+                <Icon name='facebook' disabled/>Facebook
               </Menu.Item>
               <Menu.Item name='twitter'>
-                <Icon name='twitter' disabled />Twitter
+                <Icon name='twitter' disabled/>Twitter
               </Menu.Item>
               <Menu.Item name='instagram'>
-                <Icon name='instagram' disabled />Instagram
+                <Icon name='instagram' disabled/>Instagram
               </Menu.Item>
             </Menu>
           </Grid.Column>

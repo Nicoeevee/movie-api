@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import React, {Component} from 'react'
+import {Redirect} from 'react-router-dom'
 import AuthContext from '../context/AuthContext'
-import { parseJwt } from '../misc/Helpers'
+import {parseJwt} from '../misc/Helpers'
 
 class OAuth2Redirect extends Component {
   static contextType = AuthContext
@@ -16,7 +16,7 @@ class OAuth2Redirect extends Component {
     if (accessToken) {
       this.handleLogin(accessToken)
       const redirect = "/"
-      this.setState({ redirect })
+      this.setState({redirect})
     }
   }
 
@@ -26,14 +26,14 @@ class OAuth2Redirect extends Component {
 
   handleLogin = (accessToken) => {
     const data = parseJwt(accessToken)
-    const user = { data, accessToken }
+    const user = {data, accessToken}
 
     const Auth = this.context
     Auth.userLogin(user)
   }
 
   render() {
-    return <Redirect to={this.state.redirectTo} />
+    return <Redirect to={this.state.redirectTo}/>
   }
 }
 
