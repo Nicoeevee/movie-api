@@ -16,7 +16,6 @@ public interface BookmarkMapper {
 
   Bookmark toBookmark(CreateBookmarkRequest createBookmarkRequest);
 
-  @Mapping(target = "createdAt", dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
   BookmarkDto toBookmarkDto(Bookmark bookmark);
 
 }

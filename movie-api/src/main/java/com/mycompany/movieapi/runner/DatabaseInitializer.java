@@ -1,9 +1,11 @@
 package com.mycompany.movieapi.runner;
 
+import com.mycompany.movieapi.model.Bookmark;
 import com.mycompany.movieapi.model.Movie;
 import com.mycompany.movieapi.model.User;
 import com.mycompany.movieapi.security.WebSecurityConfig;
 import com.mycompany.movieapi.security.oauth2.OAuth2Provider;
+import com.mycompany.movieapi.service.BookmarkService;
 import com.mycompany.movieapi.service.MovieService;
 import com.mycompany.movieapi.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,9 +33,14 @@ public class DatabaseInitializer implements CommandLineRunner {
             new Movie("tt9315054", "智能逆袭", "https://m.media-amazon.com/images/M/MV5BN2RlNmE0MzktNjEyNi00NDcxLThhYjItZWQ4NjM3ZDIzMDMxXkEyXkFqcGdeQXVyNjEwNTM2Mzc@._V1_UY268_CR16,0,182,268_AL_.jpg", "https://ddrk.me/next/"),
             new Movie("tt1190634", "黑袍纠察队 (第2季)", "https://m.media-amazon.com/images/M/MV5BNGEyOGJiNWEtMTgwMi00ODU4LTlkMjItZWI4NjFmMzgxZGY2XkEyXkFqcGdeQXVyNjcyNjcyMzQ@._V1_UX182_CR0,0,182,268_AL_.jpg", "https://ddrk.me/the-boys/")
     );
+    private static final Set<Bookmark> BOOKMARKS = Stream.of(
+            new Bookmark("影评", "不错！"),
+            new Bookmark("今日影评", "不错！不错！")
+    ).collect(Collectors.toSet());
     private final UserService userService;
-    private final MovieService movieService;
+    private final BookmarkService bookmarkService;
     private final PasswordEncoder passwordEncoder;
+    private final MovieService movieService;
 
     @Override
     public void run(String... args) {
@@ -41,8 +51,14 @@ public class DatabaseInitializer implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.saveUser(user);
         });
-        MOVIES.forEach(movieService::saveMovie);
-        log.info("Database initialized");
+        MOVIES.forEach(movie -> {
+            movie.setBookmarks(BOOKMARKS);
+            movieService.saveMovie(movie);
+        });
+        Bookmark bookmark = new Bookmark("名字", "描述");
+        bookmark.setUser(USERS.get(1));
+        bookmarkService.saveBookmark(bookmark);
+        log.info("Congratulation Database initialized");
     }
 
 }

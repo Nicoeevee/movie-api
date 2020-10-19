@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -31,8 +30,6 @@ public class User {
     private OAuth2Provider provider;
 
     private String providerId;
-    @ManyToMany
-    private Set<Bookmark> bookmarks;
 
     public User(String username, String password, String name, String email, String role, String imageUrl, OAuth2Provider provider, String providerId) {
         this.username = username;

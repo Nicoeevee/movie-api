@@ -1,5 +1,6 @@
 package com.mycompany.movieapi.service;
 
+import com.mycompany.movieapi.model.Bookmark;
 import com.mycompany.movieapi.model.Movie;
 
 import java.util.List;

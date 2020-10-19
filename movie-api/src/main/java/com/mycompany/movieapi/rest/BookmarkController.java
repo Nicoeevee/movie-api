@@ -2,9 +2,11 @@ package com.mycompany.movieapi.rest;
 
 import com.mycompany.movieapi.mapper.BookmarkMapper;
 import com.mycompany.movieapi.model.Bookmark;
+import com.mycompany.movieapi.model.Movie;
 import com.mycompany.movieapi.rest.dto.BookmarkDto;
 import com.mycompany.movieapi.rest.dto.CreateBookmarkRequest;
 import com.mycompany.movieapi.service.BookmarkService;
+import com.mycompany.movieapi.service.MovieService;
 import com.mycompany.movieapi.service.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 import static com.mycompany.movieapi.config.SwaggerConfig.BEARER_KEY_SECURITY_SCHEME;
@@ -23,6 +26,7 @@ import static com.mycompany.movieapi.config.SwaggerConfig.BEARER_KEY_SECURITY_SC
 public class BookmarkController {
     private final BookmarkService bookmarkService;
     private final BookmarkMapper bookmarkMapper;
+    private final MovieService movieService;
     private final TagService tagService;
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
@@ -36,6 +40,9 @@ public class BookmarkController {
     @PostMapping
     public BookmarkDto createBookmark(@Valid @RequestBody CreateBookmarkRequest createBookmarkRequest) {
         Bookmark bookmark = bookmarkMapper.toBookmark(createBookmarkRequest);
+        Movie movie = movieService.validateAndGetMovie(createBookmarkRequest.getImdb());
+        movie.getBookmarks().add(bookmark);
+        movieService.saveMovie(movie);
         return bookmarkMapper.toBookmarkDto(bookmarkService.saveBookmark(bookmark));
     }
 

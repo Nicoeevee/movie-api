@@ -3,7 +3,9 @@ spring:
     name: movie-api
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+    open-in-view: true
+    show-sql: true
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/moviedb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root

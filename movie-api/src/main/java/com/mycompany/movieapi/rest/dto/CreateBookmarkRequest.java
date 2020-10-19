@@ -8,6 +8,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class CreateBookmarkRequest {
 
+    @Schema(example = "tt0117998")
+    @NotBlank
+    private String imdb;
+
     @Schema(example = "iamaname")
     @NotBlank
     private String name;
