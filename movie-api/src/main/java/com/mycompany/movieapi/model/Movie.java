@@ -29,12 +29,6 @@ public class Movie {
     @Column(nullable = false, updatable = false)
     private Date createTime;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private Set<Bookmark> bookmarks;
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private Set<Tag> tags;
-
     public Movie(String imdb, String title, String poster, String url) {
         this.imdb = imdb;
         this.title = title;

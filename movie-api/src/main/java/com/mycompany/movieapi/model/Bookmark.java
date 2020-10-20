@@ -1,6 +1,7 @@
 package com.mycompany.movieapi.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,9 +13,6 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @Table(name = "bookmarks")
 public class Bookmark {
     @Id
@@ -38,7 +36,12 @@ public class Bookmark {
     @Column(name = "description", columnDefinition = "TEXT", length = 1024)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "imdb_id")
+    private Movie movie;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Bookmark(@NotNull @Size(min = 1, max = 50, message = "length of Name must be between 5 and 50") String name, @NotNull @Size(min = 1, max = 1000) String description) {

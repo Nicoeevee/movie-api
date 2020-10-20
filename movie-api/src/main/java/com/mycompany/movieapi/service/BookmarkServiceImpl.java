@@ -25,6 +25,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
+    public List<Bookmark> getBookmarksByMovieId(String imdbId) {
+        return bookmarkRepository.findBookmarksByMovie_Imdb(imdbId);
+    }
+
+    @Override
     public List<Bookmark> getBookmarks() {
         return bookmarkRepository.findAll();
     }
@@ -32,7 +37,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     @CacheEvict(value = "bookmarks", key = "#bookmark.id")
     public Bookmark saveBookmark(Bookmark bookmark) {
-       return bookmarkRepository.save(bookmark);
+        return bookmarkRepository.save(bookmark);
     }
 
     @Override

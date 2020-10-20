@@ -15,5 +15,4 @@ public class MovieDto {
   private String url;
   private Date updateTime;
   private Date createTime;
-  private Set<Bookmark> bookmarks;
 }

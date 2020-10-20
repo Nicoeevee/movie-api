@@ -51,13 +51,12 @@ public class DatabaseInitializer implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.saveUser(user);
         });
-        MOVIES.forEach(movie -> {
-            movie.setBookmarks(BOOKMARKS);
-            movieService.saveMovie(movie);
+        MOVIES.forEach(movieService::saveMovie);
+        BOOKMARKS.forEach(bookmark -> {
+            bookmark.setMovie(MOVIES.get(0));
+            bookmark.setUser(USERS.get(1));
+            bookmarkService.saveBookmark(bookmark);
         });
-        Bookmark bookmark = new Bookmark("名字", "描述");
-        bookmark.setUser(USERS.get(1));
-        bookmarkService.saveBookmark(bookmark);
         log.info("Congratulation Database initialized");
     }
 

@@ -3,6 +3,7 @@ package com.mycompany.movieapi.rest;
 import com.mycompany.movieapi.mapper.BookmarkMapper;
 import com.mycompany.movieapi.model.Bookmark;
 import com.mycompany.movieapi.model.Movie;
+import com.mycompany.movieapi.model.User;
 import com.mycompany.movieapi.rest.dto.BookmarkDto;
 import com.mycompany.movieapi.rest.dto.CreateBookmarkRequest;
 import com.mycompany.movieapi.service.BookmarkService;
@@ -12,11 +13,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.mycompany.movieapi.config.SwaggerConfig.BEARER_KEY_SECURITY_SCHEME;
 
@@ -31,8 +33,11 @@ public class BookmarkController {
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
-    public List<Bookmark> getBookmarks() {
-        return bookmarkService.getBookmarks();
+    public List<BookmarkDto> getBookmarks(@RequestParam(value = "text", required = false) String imdbId) {
+        List<Bookmark> bookmarks = (imdbId == null) ? bookmarkService.getBookmarks() : bookmarkService.getBookmarksByMovieId(imdbId);
+        return bookmarks.stream()
+                .map(bookmarkMapper::toBookmarkDto)
+                .collect(Collectors.toList());
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
@@ -41,17 +46,17 @@ public class BookmarkController {
     public BookmarkDto createBookmark(@Valid @RequestBody CreateBookmarkRequest createBookmarkRequest) {
         Bookmark bookmark = bookmarkMapper.toBookmark(createBookmarkRequest);
         Movie movie = movieService.validateAndGetMovie(createBookmarkRequest.getImdb());
-        movie.getBookmarks().add(bookmark);
-        movieService.saveMovie(movie);
+        bookmark.setMovie(movie);
+        bookmark.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return bookmarkMapper.toBookmarkDto(bookmarkService.saveBookmark(bookmark));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @DeleteMapping("/{id}")
-    public Bookmark deleteBookmark(@PathVariable Long id) {
+    public BookmarkDto deleteBookmark(@PathVariable Long id) {
         Bookmark bookmark = bookmarkService.getBookmarkById(id);
         bookmarkService.deleteBookmarkById(id);
-        return bookmark;
+        return bookmarkMapper.toBookmarkDto(bookmark);
     }
 
 }
