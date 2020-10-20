@@ -37,6 +37,10 @@ public class DatabaseInitializer implements CommandLineRunner {
             new Bookmark("影评", "不错！"),
             new Bookmark("今日影评", "不错！不错！")
     ).collect(Collectors.toSet());
+    private static final Set<Bookmark> BOOKMARKS2 = Stream.of(
+            new Bookmark("影评hah", "hahhahhah！"),
+            new Bookmark("hah今日影评", "hah")
+    ).collect(Collectors.toSet());
     private final UserService userService;
     private final BookmarkService bookmarkService;
     private final PasswordEncoder passwordEncoder;
@@ -54,6 +58,11 @@ public class DatabaseInitializer implements CommandLineRunner {
         MOVIES.forEach(movieService::saveMovie);
         BOOKMARKS.forEach(bookmark -> {
             bookmark.setMovie(MOVIES.get(0));
+            bookmark.setUser(USERS.get(1));
+            bookmarkService.saveBookmark(bookmark);
+        });
+        BOOKMARKS2.forEach(bookmark -> {
+            bookmark.setMovie(MOVIES.get(1));
             bookmark.setUser(USERS.get(1));
             bookmarkService.saveBookmark(bookmark);
         });

@@ -41,4 +41,8 @@ public class User {
         this.provider = provider;
         this.providerId = providerId;
     }
+
+    public User(String username) {
+        this.username = username;
+    }
 }

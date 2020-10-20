@@ -9,14 +9,15 @@ import com.mycompany.movieapi.rest.dto.CreateBookmarkRequest;
 import com.mycompany.movieapi.service.BookmarkService;
 import com.mycompany.movieapi.service.MovieService;
 import com.mycompany.movieapi.service.TagService;
+import com.mycompany.movieapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ public class BookmarkController {
     private final BookmarkService bookmarkService;
     private final BookmarkMapper bookmarkMapper;
     private final MovieService movieService;
+    private final UserService userService;
     private final TagService tagService;
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
@@ -43,11 +45,12 @@ public class BookmarkController {
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public BookmarkDto createBookmark(@Valid @RequestBody CreateBookmarkRequest createBookmarkRequest) {
+    public BookmarkDto createBookmark(@Valid @RequestBody CreateBookmarkRequest createBookmarkRequest, Principal principal) {
         Bookmark bookmark = bookmarkMapper.toBookmark(createBookmarkRequest);
         Movie movie = movieService.validateAndGetMovie(createBookmarkRequest.getImdb());
+        User user = userService.validateAndGetUserByUsername(principal.getName());
         bookmark.setMovie(movie);
-        bookmark.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        bookmark.setUser(user);
         return bookmarkMapper.toBookmarkDto(bookmarkService.saveBookmark(bookmark));
     }
 

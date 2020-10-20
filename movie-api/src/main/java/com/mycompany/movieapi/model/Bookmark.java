@@ -37,11 +37,11 @@ public class Bookmark {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "imdb_id")
+    @JoinColumn(name = "imdb_id", nullable = false)
     private Movie movie;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Bookmark(@NotNull @Size(min = 1, max = 50, message = "length of Name must be between 5 and 50") String name, @NotNull @Size(min = 1, max = 1000) String description) {
